@@ -1,2 +1,2 @@
 # TsundeOku
-Web Application built with .NRY
+Web Application Builty with .NET

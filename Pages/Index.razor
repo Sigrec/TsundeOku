@@ -1,0 +1,451 @@
+﻿@page "/"
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+a:link {
+  text-decoration: none;
+}
+
+.site-dark-theme {
+  background-color: rgba(20, 27, 63, .95);
+}
+
+.collection {
+  background-color: transparent;
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  grid-template-columns: repeat(3, minmax(250px,500px));
+  grid-template-rows: repeat(auto-fill, 240px);
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+}
+
+@@media (min-width: 2200px) {
+  .collection {
+    grid-template-columns: repeat(4, minmax(250px,500px));
+  }
+}
+
+@@media (max-width: 1300px){
+  .collection {
+      grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@@media (max-width: 900px) {
+  .collection {
+    grid-template-columns: 1fr;
+  }
+}
+
+.media-card {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background: rgba(75,44,60,.5);
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(49,54,68,.05), 0 5px 20px rgba(49,54,68,.08);
+  display: inline-grid;
+  grid-template-columns: 165px auto;
+  height: 240px;
+  min-width: 400px;
+  overflow: hidden;
+  position: relative;
+  text-align: left;
+  transition: box-shadow .6s ease;
+}
+
+.cover {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 10;
+}
+
+.cover-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.type-plus-status {
+  background: rgba(75, 44, 60, .85);
+  color: rgba(238, 208, 158, 0.90);
+  font-size: 1rem;
+  font-weight: 550;
+  padding: 10px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.type-plus-status:hover {
+  background: rgba(75, 44, 60, .95);
+}
+
+.media-card-data {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto 40px;
+  min-height: 0;
+  min-width: 0;
+}
+
+.media-card-body {
+  /*color: rgba(211,186,225, 1);*/
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-bottom: 5px;
+  position: relative;
+}
+
+.media-card-heading {
+  /*color: rgba(211,186,225, 1);*/
+  display: grid;
+  grid-template-columns: auto 50px;
+  opacity: 1;
+  z-index: 2;
+  margin-left: 20px;
+}
+
+.publisher {
+  color: rgba(238, 208, 158, 0.6);
+  font-size: 0.7rem;
+  font-weight: 400;
+  padding-top: 5px;
+}
+
+.title {
+  color: rgb(238, 208, 158);
+  font-size: 1.4rem;
+  font-weight: 590;
+  line-height: 20px;
+  margin-top: 2px;
+  margin-bottom: -1px;
+}
+
+.creators {
+  color: rgb(238, 208, 158);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.desc {
+  box-sizing: content-box;
+  color: rgba(238, 208, 158, 0.8);
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin-left: 20px;
+  margin-top: 6px;
+  transition: color .2s;
+}
+
+.desc:hover {
+  color: rgba(238, 208, 158, 1);
+}
+
+.desc-scroller {
+  backface-visibility: hidden;
+  border-radius: 20px;
+  display: block;
+  height: calc(100% - 10px);
+  margin: 5px 5px 5px 0;
+  transform: rotate3d(0,0,0,0);
+  transition: background-color .1s ease-out,margin .1s ease-out,height .1s ease-out;
+}
+
+.desc-scroller-styling {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  display: block;
+  height: calc(100% - 10px);
+  margin: 5px 5px 5px 0;
+  transform: rotate3d(0,0,0,0);
+  transition: background-color .1s ease-out,margin .1s ease-out,height .1s ease-out;
+}
+
+.media-card-note-button {
+  background-color: rgba(142,184,229, 0.7);
+  color: rgba(69, 38, 53, .8);
+  margin-top: 9px;
+  height: 30px;
+  font-size: 18px;
+  border: 2px solid rgb(238, 208, 158);
+  width: 30px;
+  border-radius: 7px;
+  margin-left: 22px;
+  font-weight: 400;
+  position: relative;
+}
+
+.media-card-note-button:hover {
+  background-color: rgba(238, 208, 158, 0.5);
+  color: rgb(238, 208, 158);
+}
+
+.scroller {
+  color: rgba(211,186,225, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-wrap {
+  display: block;
+  overflow: hidden scroll;
+  height: 100%;
+  width: 101%;
+  box-sizing: content-box;
+  padding-right: 20px;
+}
+
+.media-card-collection-progress {
+  background: rgba(69, 38, 53, .8);
+  grid-template-columns: auto 50px;
+  display: grid;
+  width: 100%;
+}
+
+.media-card-collection-label {
+  color: rgb(238, 208, 158);
+  text-align: center;
+  margin-top: 9px;
+}
+
+progress {
+  border: 3px solid rgba(238, 208, 158, 0.8);
+  border-radius: 30px;
+  width: 94%;
+  height: 55%;
+  margin-left: 20px;
+  margin-top: 9px;
+}
+
+progress::-webkit-progress-bar {
+  background-color: transparent;
+  border-radius: 7px;
+}
+
+progress::-webkit-progress-value {
+  background-color: rgba(142,184,229, 0.8);
+  border-radius: 7px;
+}
+
+</style>
+
+<body class="site-dark-theme">
+  <div class="collection-heading">
+    <div class="collection">
+      <div class="media-card">
+        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
+            <div class="type-plus-status">Manga | Ongoing</div>
+        </a>
+        <div class="media-card-data">
+          <div class="scroller">
+            <div class="scroll-wrap">
+              <div class="media-card-body">
+                <div class="media-card-heading">
+                  <div>
+                    <div class="publisher">Shogakukon</div>
+                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
+                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
+                  </div>
+                  <button type="button" class="media-card-note-button">N</button>
+                </div>
+                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
+              </div>
+            </div>
+            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
+              <div class="desc-scroller-styling"></div>
+            </div>
+          </div>
+          <div class="media-card-collection-progress">
+            <progress class="VolumesPurchased" value="9" max="29"></progress>
+            <label class="media-card-collection-label">9/29</label>
+          </div>
+        </div>
+      </div>
+      <div class="media-card">
+        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
+            <div class="type-plus-status">Manga | Ongoing</div>
+        </a>
+        <div class="media-card-data">
+          <div class="scroller">
+            <div class="scroll-wrap">
+              <div class="media-card-body">
+                <div class="media-card-heading">
+                  <div>
+                    <div class="publisher">Shogakukon</div>
+                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
+                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
+                  </div>
+                  <button type="button" class="media-card-note-button">N</button>
+                </div>
+                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
+              </div>
+            </div>
+            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
+              <div class="desc-scroller-styling"></div>
+            </div>
+          </div>
+          <div class="media-card-collection-progress">
+            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
+          </div>
+        </div>
+      </div>
+      <div class="media-card">
+        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
+            <div class="type-plus-status">Manga | Ongoing</div>
+        </a>
+        <div class="media-card-data">
+          <div class="scroller">
+            <div class="scroll-wrap">
+              <div class="media-card-body">
+                <div class="media-card-heading">
+                  <div>
+                    <div class="publisher">Shogakukon</div>
+                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
+                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
+                  </div>
+                  <button type="button" class="media-card-note-button">N</button>
+                </div>
+                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
+              </div>
+            </div>
+            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
+              <div class="desc-scroller-styling"></div>
+            </div>
+          </div>
+          <div class="media-card-collection-progress">
+            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
+          </div>
+        </div>
+      </div>
+      <div class="media-card">
+        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
+            <div class="type-plus-status">Manga | Ongoing</div>
+        </a>
+        <div class="media-card-data">
+          <div class="scroller">
+            <div class="scroll-wrap">
+              <div class="media-card-body">
+                <div class="media-card-heading">
+                  <div>
+                    <div class="publisher">Shogakukon</div>
+                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
+                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
+                  </div>
+                  <button type="button" class="media-card-note-button">N</button>
+                </div>
+                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
+              </div>
+            </div>
+            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
+              <div class="desc-scroller-styling"></div>
+            </div>
+          </div>
+          <div class="media-card-collection-progress">
+            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
+          </div>
+        </div>
+      </div>
+      <div class="media-card">
+        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
+            <div class="type-plus-status">Manga | Ongoing</div>
+        </a>
+        <div class="media-card-data">
+          <div class="scroller">
+            <div class="scroll-wrap">
+              <div class="media-card-body">
+                <div class="media-card-heading">
+                  <div>
+                    <div class="publisher">Shogakukon</div>
+                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
+                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
+                  </div>
+                  <button type="button" class="media-card-note-button">N</button>
+                </div>
+                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
+              </div>
+            </div>
+            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
+              <div class="desc-scroller-styling"></div>
+            </div>
+          </div>
+          <div class="media-card-collection-progress">
+            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
+          </div>
+        </div>
+      </div>
+      <div class="media-card">
+        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
+            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
+            <div class="type-plus-status">Manga | Ongoing</div>
+        </a>
+        <div class="media-card-data">
+          <div class="scroller">
+            <div class="scroll-wrap">
+              <div class="media-card-body">
+                <div class="media-card-heading">
+                  <div>
+                    <div class="publisher">Shogakukon</div>
+                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
+                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
+                  </div>
+                  <button type="button" class="media-card-note-button">N</button>
+                </div>
+                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
+              </div>
+            </div>
+            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
+              <div class="desc-scroller-styling"></div>
+            </div>
+          </div>
+          <div class="media-card-collection-progress">
+            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+@code {
+  private string romajiTitle = "Chiruran: Shinsengumi Requiem";
+  private string nativeTitle = "新撰组镇魂歌";
+  private bool toggle = true; //True means it's in Romaji, False means it's in Native
+  private string displayedTitle = "Chiruran: Shinsengumi Requiem";
+  private short volumesPurchased2;
+  private string currTitle;
+
+  //Changes the title between arabic (romaji) and logographic (native) japanese
+  private void ShowNativeTitle(){
+    if (toggle){
+      displayedTitle = nativeTitle;
+      toggle = false;
+    }
+    else {
+      displayedTitle = romajiTitle;
+      toggle = true;
+    }
+  }
+
+  //Gets the current title so it gets the right CSS
+  private string CurrentTitle(){
+    currTitle = toggle ? ".arabic" : ".logographic";
+    return currTitle;
+  }
+}
+
+@* <SurveyPrompt Title="How is Blazor working for you?" /> *@
