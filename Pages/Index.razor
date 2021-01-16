@@ -8,11 +8,10 @@ a:link {
 }
 
 .site-dark-theme {
-  background-color: rgba(20, 27, 63, .95);
+  background-color: rgb(34, 40, 49);
 }
 
 .collection {
-  background-color: transparent;
   display: grid;
   grid-column-gap: 20px;
   grid-row-gap: 20px;
@@ -44,9 +43,9 @@ a:link {
 .media-card {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  background: rgba(75,44,60,.5);
+  background: rgba(48, 71, 94, 0.5);
   border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(49,54,68,.05), 0 5px 20px rgba(49,54,68,.08);
+  /*box-shadow: 0 4px 6px rgba(49,54,68,.05), 0 5px 20px rgba(49,54,68,.08);*/
   display: inline-grid;
   grid-template-columns: 165px auto;
   height: 240px;
@@ -73,7 +72,7 @@ a:link {
 }
 
 .type-plus-status {
-  background: rgba(75, 44, 60, .85);
+  background: rgba(48, 71, 94, .85);
   color: rgba(238, 208, 158, 0.90);
   font-size: 1rem;
   font-weight: 550;
@@ -84,7 +83,7 @@ a:link {
 }
 
 .type-plus-status:hover {
-  background: rgba(75, 44, 60, .95);
+  background: rgba(48, 71, 94, .95);
 }
 
 .media-card-data {
@@ -137,17 +136,13 @@ a:link {
 
 .desc {
   box-sizing: content-box;
-  color: rgba(238, 208, 158, 0.8);
+  color: rgba(236, 236, 236, 0.8);
   display: block;
   font-size: 0.8rem;
   line-height: 1.6;
   margin-left: 20px;
   margin-top: 6px;
   transition: color .2s;
-}
-
-.desc:hover {
-  color: rgba(238, 208, 158, 1);
 }
 
 .desc-scroller {
@@ -158,6 +153,8 @@ a:link {
   margin: 5px 5px 5px 0;
   transform: rotate3d(0,0,0,0);
   transition: background-color .1s ease-out,margin .1s ease-out,height .1s ease-out;
+  position: absolute;
+  top: 0px;
 }
 
 .desc-scroller-styling {
@@ -172,12 +169,12 @@ a:link {
 }
 
 .media-card-note-button {
-  background-color: rgba(142,184,229, 0.7);
-  color: rgba(69, 38, 53, .8);
+  background-color: rgba(48, 71, 94, .5);
+  color: rgb(238, 208, 158);
   margin-top: 9px;
   height: 30px;
   font-size: 18px;
-  border: 2px solid rgb(238, 208, 158);
+  border: 2px solid rgba(236, 236, 236, 0.8);
   width: 30px;
   border-radius: 7px;
   margin-left: 22px;
@@ -187,7 +184,7 @@ a:link {
 
 .media-card-note-button:hover {
   background-color: rgba(238, 208, 158, 0.5);
-  color: rgb(238, 208, 158);
+  color: /*rgba(48, 71, 94, .95)*/black;
 }
 
 .scroller {
@@ -206,35 +203,101 @@ a:link {
 }
 
 .media-card-collection-progress {
-  background: rgba(69, 38, 53, .8);
-  grid-template-columns: auto 50px;
+  background: rgba(57, 62, 70, .5);
   display: grid;
+  grid-template-columns: auto 70px;
+  position: relative;
   width: 100%;
 }
 
-.media-card-collection-label {
+.media-card-collection-progress p {
+  color: rgb(57, 62, 70);
+  font-size: 0.9rem;
+  font-weight: 550;
+  opacity: 0;
+  position: absolute;
+  visibility: hidden;
+  margin-top: 10px;
+  margin-left: 2-5px;
+  -webkit-transition: visibility 0s, opacity 0.5s linear; 
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.media-card-collection-progress:hover p {
+  opacity: 0.9;
+  visibility: visible;
   color: rgb(238, 208, 158);
+  display: grid;
   text-align: center;
-  margin-top: 9px;
+  margin-left: 185px;
 }
 
 progress {
   border: 3px solid rgba(238, 208, 158, 0.8);
   border-radius: 30px;
   width: 94%;
-  height: 55%;
+  height: 25px;
+  position: static;
   margin-left: 20px;
-  margin-top: 9px;
+  margin-top: 8px;
 }
 
 progress::-webkit-progress-bar {
   background-color: transparent;
-  border-radius: 7px;
+  border-radius: 30px;
 }
 
 progress::-webkit-progress-value {
-  background-color: rgba(142,184,229, 0.8);
-  border-radius: 7px;
+  background-color: rgba(236, 236, 236, 0.6);
+  border-radius: 30px;
+}
+
+.media-card-collection-label {
+  color: rgb(238, 208, 158);
+  background-color: transparent;
+  display: grid;
+  grid-template-rows: 20px auto;
+  position: relative;
+  width: 100%;
+}
+
+.media-card-collection-label-text {
+  margin-top: 3px;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: bold;
+  text-align: center;
+  display: grid;
+}
+
+.media-card-collection-label-button-minus {
+  background-color: transparent;
+  color: rgb(238, 208, 158);
+  font-size: 30px;
+  border: 0px;
+  font-weight: bold;
+  margin-left: 37px;
+  display: flex;
+  margin-top: -42px;
+}
+
+.media-card-collection-label-button-minus:focus {
+  outline: none;
+}
+
+.media-card-collection-label-button-plus {
+  background-color: transparent;
+  color: rgb(238, 208, 158);
+  border: 0px;
+  font-size: 19px;
+  font-weight: 550;
+  margin-left: 10px;
+  margin-top: -6px;
+  display: flex;
+}
+
+.media-card-collection-label-button-plus:focus {
+  outline: none;
 }
 
 </style>
@@ -257,163 +320,40 @@ progress::-webkit-progress-value {
                     <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
                     <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
                   </div>
-                  <button type="button" class="media-card-note-button">N</button>
+                  @if (VolumesPurchased < MaxVolumes) {
+                    <button class="media-card-note-button" @onclick="IncrementCount" type="button">+</button>
+                  }
+                  else {
+                    <button class="media-card-note-button" @onclick="IncrementCount" type="button" disabled>+</button>
+                  }
                 </div>
                 <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
               </div>
             </div>
-            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
+            <div class="desc-scroller">
               <div class="desc-scroller-styling"></div>
             </div>
           </div>
           <div class="media-card-collection-progress">
-            <progress class="VolumesPurchased" value="9" max="29"></progress>
-            <label class="media-card-collection-label">9/29</label>
-          </div>
-        </div>
-      </div>
-      <div class="media-card">
-        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
-            <div class="type-plus-status">Manga | Ongoing</div>
-        </a>
-        <div class="media-card-data">
-          <div class="scroller">
-            <div class="scroll-wrap">
-              <div class="media-card-body">
-                <div class="media-card-heading">
-                  <div>
-                    <div class="publisher">Shogakukon</div>
-                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
-                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
-                  </div>
-                  <button type="button" class="media-card-note-button">N</button>
-                </div>
-                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
+            <progress value="@VolumesPurchased" max="@MaxVolumes"></progress>
+            <div class="media-card-collection-label">
+              <label class="media-card-collection-label-text">@VolumesPurchased/@MaxVolumes</label>
+              <div>
+                @if (VolumesPurchased == MaxVolumes) {
+                  <button class="media-card-collection-label-button-plus" @onclick="IncrementCount" type="button" disabled>+</button>
+                }
+                else {
+                  <button class="media-card-collection-label-button-plus" @onclick="IncrementCount" type="button">+</button>
+                }
+                @if (VolumesPurchased == 0) {
+                  <button class="media-card-collection-label-button-minus" @onclick="DecrementCount" type="button" disabled>-</button>
+                }
+                else {
+                  <button class="media-card-collection-label-button-minus" @onclick="DecrementCount" type="button">-</button>
+                }
               </div>
             </div>
-            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
-              <div class="desc-scroller-styling"></div>
-            </div>
-          </div>
-          <div class="media-card-collection-progress">
-            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
-          </div>
-        </div>
-      </div>
-      <div class="media-card">
-        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
-            <div class="type-plus-status">Manga | Ongoing</div>
-        </a>
-        <div class="media-card-data">
-          <div class="scroller">
-            <div class="scroll-wrap">
-              <div class="media-card-body">
-                <div class="media-card-heading">
-                  <div>
-                    <div class="publisher">Shogakukon</div>
-                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
-                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
-                  </div>
-                  <button type="button" class="media-card-note-button">N</button>
-                </div>
-                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
-              </div>
-            </div>
-            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
-              <div class="desc-scroller-styling"></div>
-            </div>
-          </div>
-          <div class="media-card-collection-progress">
-            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
-          </div>
-        </div>
-      </div>
-      <div class="media-card">
-        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
-            <div class="type-plus-status">Manga | Ongoing</div>
-        </a>
-        <div class="media-card-data">
-          <div class="scroller">
-            <div class="scroll-wrap">
-              <div class="media-card-body">
-                <div class="media-card-heading">
-                  <div>
-                    <div class="publisher">Shogakukon</div>
-                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
-                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
-                  </div>
-                  <button type="button" class="media-card-note-button">N</button>
-                </div>
-                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
-              </div>
-            </div>
-            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
-              <div class="desc-scroller-styling"></div>
-            </div>
-          </div>
-          <div class="media-card-collection-progress">
-            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
-          </div>
-        </div>
-      </div>
-      <div class="media-card">
-        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
-            <div class="type-plus-status">Manga | Ongoing</div>
-        </a>
-        <div class="media-card-data">
-          <div class="scroller">
-            <div class="scroll-wrap">
-              <div class="media-card-body">
-                <div class="media-card-heading">
-                  <div>
-                    <div class="publisher">Shogakukon</div>
-                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
-                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
-                  </div>
-                  <button type="button" class="media-card-note-button">N</button>
-                </div>
-                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
-              </div>
-            </div>
-            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
-              <div class="desc-scroller-styling"></div>
-            </div>
-          </div>
-          <div class="media-card-collection-progress">
-            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
-          </div>
-        </div>
-      </div>
-      <div class="media-card">
-        <a href="https://anilist.co/manga/118586/Sousou-no-Frieren/" class="cover">
-            <img src="https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx82005-hw4GjRGAvcpG.jpg" alt="Sousou no Frieren Vol 1 Cover" class="cover-image">
-            <div class="type-plus-status">Manga | Ongoing</div>
-        </a>
-        <div class="media-card-data">
-          <div class="scroller">
-            <div class="scroll-wrap">
-              <div class="media-card-body">
-                <div class="media-card-heading">
-                  <div>
-                    <div class="publisher">Shogakukon</div>
-                    <div class="title" @onclick="ShowNativeTitle">@displayedTitle</div>
-                    <div class="creators">Hashimoto Eiji | Umemura Shinya</div>
-                  </div>
-                  <button type="button" class="media-card-note-button">N</button>
-                </div>
-                <span class="desc">In 1912, a young woman tracks down the elderly Nagakura Shinpachi, determined to hear the true story of the Demon of the Shinsengumi, the Vice Commander Hijikata Toshizou. Hijikata's story begins in 1859, when he is a violent young man that is honing his sword skills while peddling his family's medicine. Soon, in his quest to find stronger people to fight, Hijikata starts to come into contact with others who will eventually be his comrades in the Shinsengumi. The first one to make an impression on the brash young man is Kondo Isami, who proves to be a better fighter than Hijikata.</span>
-              </div>
-            </div>
-            <div class="desc-scroller" style="position: absolute; height: 0px; top: 0px;">
-              <div class="desc-scroller-styling"></div>
-            </div>
-          </div>
-          <div class="media-card-collection-progress">
-            <p class="media-card-progress-bar-header">Total Volumes Purchased Bar Goes Here</p>
+            <p class="media-card-collection-progress-percentage">@CalculatePercentage()%</p>
           </div>
         </div>
       </div>
@@ -422,11 +362,14 @@ progress::-webkit-progress-value {
 </body>
 
 @code {
+  @using System;
+
   private string romajiTitle = "Chiruran: Shinsengumi Requiem";
   private string nativeTitle = "新撰组镇魂歌";
   private bool toggle = true; //True means it's in Romaji, False means it's in Native
   private string displayedTitle = "Chiruran: Shinsengumi Requiem";
-  private short volumesPurchased2;
+  private short VolumesPurchased = 112;
+  private short MaxVolumes = 112;
   private string currTitle;
 
   //Changes the title between arabic (romaji) and logographic (native) japanese
@@ -445,6 +388,18 @@ progress::-webkit-progress-value {
   private string CurrentTitle(){
     currTitle = toggle ? ".arabic" : ".logographic";
     return currTitle;
+  }
+
+  private void DecrementCount() {
+    VolumesPurchased--;
+  }
+
+  private void IncrementCount() {
+    VolumesPurchased++;
+  }
+
+  private double CalculatePercentage(){
+    return Math.Round((((double)VolumesPurchased / MaxVolumes) * 100), 0);
   }
 }
 
