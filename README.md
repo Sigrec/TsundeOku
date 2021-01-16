@@ -1,2 +1,2 @@
 # TsundeOku
-Web Application Builty with .NET
+Web Application Built with .NET
