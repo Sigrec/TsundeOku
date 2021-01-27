@@ -1,4 +1,0 @@
-HEADER SECTION => (
-Title (Native, Romaji, English)
-Publisher
-)
