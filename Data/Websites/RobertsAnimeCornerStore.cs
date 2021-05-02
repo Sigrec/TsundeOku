@@ -17,15 +17,15 @@ namespace MangaWebScrape.Websites
         private static string getUrl(string bookTitle, bool pageExists){
             Dictionary<string, Regex> urlMapDict = new Dictionary<string, Regex>()
             {
-                {"mangrapnovag", new Regex("^[a-bA-B/d]")},
-                {"mangrapnovhp", new Regex("^[c-dC-D]")},
-                {"mangrapnovqz", new Regex("^[e-gE-G]")},
-                {"magrnomo", new Regex("^[h-kH-K]")},
-                {"magrnops", new Regex("^[l-nL-N]")},
-                {"magrnotz", new Regex("^[o-qO-Q]")},
-                {"magrnors", new Regex("^[r-sR-S]")},
-                {"magrnotv", new Regex("^[t-vT-V]")},
-                {"magrnowz", new Regex("^[w-zW-Z]")}
+                {"mangrapnovag", new Regex(@"^[a-bA-B\d]")},
+                {"mangrapnovhp", new Regex(@"^[c-dC-D]")},
+                {"mangrapnovqz", new Regex(@"^[e-gE-G]")},
+                {"magrnomo", new Regex(@"^[h-kH-K]")},
+                {"magrnops", new Regex(@"^[l-nL-N]")},
+                {"magrnotz", new Regex(@"^[o-qO-Q]")},
+                {"magrnors", new Regex(@"^[r-sR-S]")},
+                {"magrnotv", new Regex(@"^[t-vT-V]")},
+                {"magrnowz", new Regex(@"^[w-zW-Z]")}
             };
 
             string url = "";
@@ -41,7 +41,6 @@ namespace MangaWebScrape.Websites
             else{ //Gets the actual page that houses the data that will be scraped from
                 url = String.Format("https://www.animecornerstore.com/{0}", bookTitle);
                 links.Add(url);
-                return url;
             }
             return url;
         }
@@ -53,10 +52,11 @@ namespace MangaWebScrape.Websites
 
             HtmlNodeCollection seriesTitle = doc.DocumentNode.SelectNodes("//a[contains(@href,'.html')]");
             try{
+                bookTitle = bookTitle.ToLower();
                 Parallel.ForEach(seriesTitle, (title, state) =>
                 {
                     string currTitle = title.InnerText.ToLower();
-                    if (currTitle.IndexOf(bookTitle.ToLower()) != -1){
+                    if (currTitle.IndexOf(bookTitle) != -1){
                         if ((bookType == 'M') && (currTitle.IndexOf("graphic") != -1)){
                             link = getUrl(title.Attributes["href"].Value, true);
                             state.Stop();
@@ -67,6 +67,9 @@ namespace MangaWebScrape.Websites
                         }
                     }
                 });
+                if (link.Length == 0){
+                    return "DNE";
+                }
             }
             catch(NullReferenceException ex){
                 if (seriesTitle == null){
@@ -75,7 +78,6 @@ namespace MangaWebScrape.Websites
                 Console.WriteLine(seriesTitle.Count);
                 Console.Error.WriteLine(ex);
             }
-
             return link;
         }
 
@@ -95,6 +97,11 @@ namespace MangaWebScrape.Websites
             string linkPage = getPageData(edgeDriver, bookTitle, bookType, doc);
             if (linkPage == null){
                 Console.Error.WriteLine("Error! Invalid Series Title");
+                Environment.Exit(1);
+            }
+            else if (linkPage.Equals("DNE")){
+                Console.Error.WriteLine(bookTitle + " does not exist at this website");
+                edgeDriver.Quit();
             }
             else{
                 try{
@@ -124,6 +131,7 @@ namespace MangaWebScrape.Websites
                 }
                 catch(NullReferenceException ex){
                     Console.Error.WriteLine(ex);
+                    Environment.Exit(1);
                 }
             }
             return dataList;

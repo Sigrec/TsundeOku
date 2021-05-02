@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
@@ -60,17 +60,18 @@ namespace MangaWebScrape.Websites
             // Get the page data from the HTML doc
             HtmlNodeCollection titleData = doc.DocumentNode.SelectNodes("//span[@itemprop='name']");
             HtmlNodeCollection priceData = doc.DocumentNode.SelectNodes("//span[@itemprop='price']");
-            HtmlNodeCollection stockStatusData = doc.DocumentNode.SelectNodes("//div[@class='product-line-stock-container ']");
+            HtmlNodeCollection stockStatusData = doc.DocumentNode.SelectNodes("//div[@class='product-line-stock-container '] | //span[@class='product-line-stock-msg-out-text']");
             HtmlNode pageCheck = doc.DocumentNode.SelectSingleNode("//li[@class='global-views-pagination-next']");
 
             try{
                 double GotAnimeDiscount = 0.05;
                 decimal priceVal;
                 string priceTxt, stockStatus, currTitle;
-                Parallel.For(0, titleData.Count, x =>
+                Regex removeWords = new Regex(@"[^a-z']");
+                for (int x = 0; x < titleData.Count; x++)
                 {
                     currTitle = titleData[x].InnerText;
-                    if(currTitle.ToLower().IndexOf(bookTitle.ToLower()) != -1){
+                    if(removeWords.Replace(currTitle.ToLower(), "").IndexOf(removeWords.Replace(bookTitle.ToLower(), "")) != -1){
                         priceVal = System.Convert.ToDecimal(priceData[x].InnerText.Substring(1));
                         priceTxt = memberStatus ? "$" + (priceVal - (priceVal * (decimal)GotAnimeDiscount)).ToString("0.00") : priceData[x].InnerText;
 
@@ -91,7 +92,7 @@ namespace MangaWebScrape.Websites
                         dataList.Add(new string[]{currTitle, priceTxt, stockStatus, "RightStufAnime"});
                         //Console.WriteLine(currTitle + " " + priceTxt + " " + stockStatus);
                     }
-                });
+                }
 
                 if (pageCheck != null){
                     currPageNum++;
@@ -107,6 +108,7 @@ namespace MangaWebScrape.Websites
             }
             catch (NullReferenceException ex){
                 Console.Error.WriteLine(ex);
+                Environment.Exit(1);
             }
 
             return dataList;
