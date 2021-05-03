@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MangaWebScrape.Websites
 {
@@ -39,7 +40,7 @@ namespace MangaWebScrape.Websites
             return url;
         }
 
-        public static List<string[]> getRightStufAnimeData(string bookTitle, char bookType, bool memberStatus, byte currPageNum)
+        public static List<string[]> GetRightStufAnimeData(string bookTitle, char bookType, bool memberStatus, byte currPageNum)
         {
             // Initialize the html doc for crawling
             HtmlDocument doc = new HtmlDocument();
@@ -54,7 +55,7 @@ namespace MangaWebScrape.Websites
             EdgeDriver edgeDriver = new EdgeDriver(edgeOptions);
 
             edgeDriver.Navigate().GoToUrl(getUrl(bookType, currPageNum, bookTitle));
-            Thread.Sleep(3000);
+            Thread.Sleep(3500);
             doc.LoadHtml(edgeDriver.PageSource);
 
             // Get the page data from the HTML doc
@@ -70,8 +71,8 @@ namespace MangaWebScrape.Websites
                 Regex removeWords = new Regex(@"[^a-z']");
                 for (int x = 0; x < titleData.Count; x++)
                 {
-                    currTitle = titleData[x].InnerText;
-                    if(removeWords.Replace(currTitle.ToLower(), "").IndexOf(removeWords.Replace(bookTitle.ToLower(), "")) != -1){
+                    currTitle = titleData[x].InnerText;                   
+                    if(removeWords.Replace(currTitle.ToLower(), "").IndexOf(removeWords.Replace(bookTitle.ToLower(), "")) == 0){
                         priceVal = System.Convert.ToDecimal(priceData[x].InnerText.Substring(1));
                         priceTxt = memberStatus ? "$" + (priceVal - (priceVal * (decimal)GotAnimeDiscount)).ToString("0.00") : priceData[x].InnerText;
 
@@ -89,14 +90,14 @@ namespace MangaWebScrape.Websites
                             stockStatus = "OOP";
                         }
 
-                        dataList.Add(new string[]{currTitle, priceTxt, stockStatus, "RightStufAnime"});
+                        dataList.Add(new string[]{currTitle, priceTxt.Trim(), stockStatus, "RightStufAnime"});
                         //Console.WriteLine(currTitle + " " + priceTxt + " " + stockStatus);
                     }
                 }
 
                 if (pageCheck != null){
                     currPageNum++;
-                    getRightStufAnimeData(bookTitle, bookType, memberStatus, currPageNum);
+                    GetRightStufAnimeData(bookTitle, bookType, memberStatus, currPageNum);
                 }
                 else{
                     edgeDriver.Quit();
@@ -110,6 +111,13 @@ namespace MangaWebScrape.Websites
                 Console.Error.WriteLine(ex);
                 Environment.Exit(1);
             }
+
+            using (StreamWriter outputFile = new StreamWriter(@"C:\MangaWebScrape\MangaWebScrape\Data_Files\RightStufAnimeData.txt"))
+            {
+                foreach (string[] data in dataList){
+                    outputFile.WriteLine(data[0] + " " + data[1] + " " + data[2] + " " + data[3]);
+                }
+            }  
 
             return dataList;
         }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace MangaWebScrape.Websites
 {
@@ -34,7 +35,7 @@ namespace MangaWebScrape.Websites
                 {
                     if (link.Value.Match(bookTitle).Success){
                         url = String.Format("https://www.animecornerstore.com/{0}.html", link.Key);
-                        links.Add(url);
+                        //links.Add(url);
                     }
                 });
             }
@@ -81,7 +82,7 @@ namespace MangaWebScrape.Websites
             return link;
         }
 
-        public static List<string[]> getRobertsAnimeCornerStoreData(string bookTitle, char bookType){
+        public static List<string[]> GetRobertsAnimeCornerStoreData(string bookTitle, char bookType){
             EdgeOptions edgeOptions = new EdgeOptions();
             edgeOptions.UseChromium = true;
             edgeOptions.PageLoadStrategy = PageLoadStrategy.Eager;
@@ -116,12 +117,13 @@ namespace MangaWebScrape.Websites
                     List<HtmlNode> priceData = doc.DocumentNode.SelectNodes("//font[@color='#ffcc33']").Where(price => price.InnerText.IndexOf("$") != -1).ToList();
 
                     string currTitle;
-                    Parallel.For(0, titleData.Count, x =>
-                    {
+                    Regex pattern = new Regex(@"#[\d]+( )");
+                    for (int x = 0; x < titleData.Count; x++){
                         currTitle = titleData[x].InnerText.Replace(",", "");
-                        dataList.Add(new string[]{titleData[x].InnerText.Replace(",", ""), priceData[x].InnerText, currTitle.IndexOf("Pre Order") != -1 ? "PO" : "IS", "RobertsAnimeCornerStore"});
-                        //Console.WriteLine(currTitle + " " + priceData[x].InnerText + " " + stockStatus);
-                    });
+                        currTitle = currTitle.Substring(0, pattern.Match(currTitle).Groups[1].Index);
+                        
+                        dataList.Add(new string[]{currTitle, priceData[x].InnerText.Trim(), currTitle.IndexOf("Pre Order") != -1 ? "PO" : "IS", "RobertsAnimeCornerStore"});
+                    }
 
                     foreach (string link in links){
                         Console.WriteLine(link);
@@ -134,6 +136,14 @@ namespace MangaWebScrape.Websites
                     Environment.Exit(1);
                 }
             }
+
+             using (StreamWriter outputFile = new StreamWriter(@"C:\MangaWebScrape\MangaWebScrape\Data_Files\RobertsAnimeCornerStoreData.txt"))
+            {
+                foreach (string[] data in dataList){
+                    outputFile.WriteLine(data[0] + " " + data[1] + " " + data[2] + " " + data[3]);
+                }
+            } 
+            
             return dataList;
         }
     }
